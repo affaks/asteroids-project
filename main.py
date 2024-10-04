@@ -1,13 +1,12 @@
 import pygame
-from constants import *
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from player import Player
-
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-     # Create groups for managing sprites
+    
+    # Create groups for managing sprites
     updatable = pygame.sprite.Group()  # Group for objects that can be updated
     drawable = pygame.sprite.Group()   # Group for objects that can be drawn
     
@@ -17,23 +16,25 @@ def main():
     drawable.add(player)    # Add player to drawable group
 
     clock = pygame.time.Clock()
-    player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
-    dt = 0
-
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
+        dt = clock.tick(60) / 1000  # Calculate delta time
+
+        # Update all objects in the updatable group
         updatable.update(dt)
 
-        screen.fill("black")
-        player.draw(screen)
+        # Clear the screen
+        screen.fill((0, 0, 0))
+
+        # Draw all objects in the drawable group
+        drawable.draw(screen)
+
+        # Flip the display
         pygame.display.flip()
-
-        # limit the framerate to 60 FPS
-        dt = clock.tick(60) / 1000
-
 
 if __name__ == "__main__":
     main()
